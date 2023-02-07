@@ -28,7 +28,18 @@ Add the dependency
 Usage:
 
 ```bash
-  mCloudDBZone!!.executeUpsert(message).await()
-  function.wrap("myhandlerxxxx-$/latest").call(map).asDeferred()
+  private fun cloudFunctions(){
+        val function = AGConnectFunction.getInstance()
+        val map = mapOf<String,String>()
+        val uiScope = CoroutineScope(Dispatchers.Main + Job())
+        CoroutineScope(Dispatchers.IO + Job()).launch(Dispatchers.IO) {
+            try {
+                val result = function.wrap("myhandlerxxxx-$/latest").call(map).await()
+                uiScope.launch{ Log.d(TAG, "callCloudFun: $result.") }
+            } catch (e: Exception) {
+                uiScope.launch{ Log.e(TAG, "callCloudFun: ${e.message}") }
+            }
+        }
+    }
 ```
 
