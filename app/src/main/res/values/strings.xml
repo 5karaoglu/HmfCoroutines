@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">HmfCoroutines</string>
+    <string name="query_messages">Query Messages</string>
+    <string name="upsert_message">Upsert Message</string>
+</resources>
