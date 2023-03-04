@@ -58,4 +58,13 @@ dependencies {
 
     //Cloud Storage
     implementation "com.huawei.agconnect:agconnect-storage:1.5.0.100"
+
+    //Location Kit
+    implementation 'com.huawei.hms:location:6.4.0.300'
+
+    //IAP Kit
+    implementation 'com.huawei.hms:iap:6.4.0.301'
+
+    //Analytics Kit
+    implementation 'com.huawei.hms:hianalytics:6.9.0.302'
 }

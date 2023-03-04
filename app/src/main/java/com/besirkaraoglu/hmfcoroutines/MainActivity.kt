@@ -19,6 +19,12 @@ import com.huawei.agconnect.cloud.database.CloudDBZoneConfig
 import com.huawei.agconnect.cloud.database.CloudDBZoneQuery
 import com.huawei.agconnect.cloud.storage.core.AGCStorageManagement
 import com.huawei.agconnect.function.AGConnectFunction
+import com.huawei.hms.analytics.HiAnalytics
+import com.huawei.hms.iap.Iap
+import com.huawei.hms.iap.entity.ProductInfoReq
+import com.huawei.hms.location.LocationRequest
+import com.huawei.hms.location.LocationServices
+import com.huawei.hms.location.LocationSettingsRequest
 import kotlinx.coroutines.*
 import java.io.File
 import java.util.UUID
@@ -41,6 +47,56 @@ class MainActivity : AppCompatActivity() {
         }
         button2.setOnClickListener {
             queryMessages()
+        }
+    }
+
+    //HMS Analytics Kit
+    private fun getAAID(){
+        val instance = HiAnalytics.getInstance(this)
+        val uiScope = CoroutineScope(Dispatchers.Main + Job())
+        CoroutineScope(Dispatchers.IO + Job()).launch(Dispatchers.IO) {
+            try {
+                val result = instance.aaid.await()
+                uiScope.launch{ Log.d(TAG, "getAAID: $result.") }
+            } catch (e: Exception) {
+                uiScope.launch{ Log.e(TAG, "getAAID: ${e.message}") }
+            }
+        }
+    }
+
+    //HMS IAP Kit
+    private fun showProducts(){
+        val productIdList: MutableList<String> = ArrayList()
+        productIdList.add("ConsumeProduct1001")
+        val req = ProductInfoReq()
+        req.priceType = 0
+        req.productIds = productIdList
+        val uiScope = CoroutineScope(Dispatchers.Main + Job())
+        CoroutineScope(Dispatchers.IO + Job()).launch(Dispatchers.IO) {
+            try {
+                val result = Iap.getIapClient(this@MainActivity).obtainProductInfo(req).await()
+                uiScope.launch{ Log.d(TAG, "checkSupport: $result.") }
+            } catch (e: Exception) {
+                uiScope.launch{ Log.e(TAG, "checkSupport: ${e.message}") }
+            }
+        }
+    }
+
+    //HMS Location Kit
+    private fun getLocation(){
+        val settingsClient = LocationServices.getSettingsClient(this)
+        val builder = LocationSettingsRequest.Builder()
+        val mLocationRequest = LocationRequest()
+        builder.addLocationRequest(mLocationRequest)
+        val locationSettingsRequest = builder.build()
+        val uiScope = CoroutineScope(Dispatchers.Main + Job())
+        CoroutineScope(Dispatchers.IO + Job()).launch(Dispatchers.IO) {
+            try {
+                val result = settingsClient.checkLocationSettings(locationSettingsRequest).await()
+                uiScope.launch{ Log.d(TAG, "getLocation: $result.") }
+            } catch (e: Exception) {
+                uiScope.launch{ Log.e(TAG, "getLocation: ${e.message}") }
+            }
         }
     }
 
