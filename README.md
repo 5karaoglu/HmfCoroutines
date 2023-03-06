@@ -1,7 +1,7 @@
 
 # HmfCoroutineExtensions
 
-Coroutine extensions library for AGC Android SDK.
+Coroutines extensions library for AGC Android SDK.
 
 
 ## Deployment
